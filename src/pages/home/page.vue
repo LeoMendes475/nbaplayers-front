@@ -53,12 +53,7 @@ async function getAllPlayers() {
 	}
 }
 
-function onPageChange(event) {
-	page.value = event.first / rows.value + 1;
-	getAllPlayers();
-}
-
-const selectedCustomer = ref();
+const focusedPlayer = ref();
 const filters = ref({
 	global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 	name: {
@@ -80,12 +75,6 @@ onMounted(() => {
 	getAllPlayers();
 });
 
-function nextPage() {
-	page.value += 1;
-	console.log("page: ", page.value);
-	getAllPlayers();
-}
-
 function openPlayerDialog(player) {
 	selectedPlayer.value = player;
 	visibleDialog.value = true;
@@ -101,7 +90,7 @@ function openPlayerDialog(player) {
 		<div class="card">
 			<PrimeDataTable
 				v-model:filters="filters"
-				v-model:selection="selectedCustomer"
+				v-model:selection="focusedPlayer"
 				:value="players"
 				stateStorage="session"
 				stateKey="dt-state-demo-session"
@@ -189,7 +178,7 @@ function openPlayerDialog(player) {
 					sortField="height"
 					filterField="height"
 					filterMatchMode="contains"
-					style="width: 10%"
+					style="width: 5%"
 				>
 					<template #body="{ data }">
 						<div class="flex items-center gap-2">
@@ -204,7 +193,7 @@ function openPlayerDialog(player) {
 					sortField="country"
 					filterField="country"
 					filterMatchMode="contains"
-					style="width: 15%"
+					style="width: 10%"
 				>
 					<template #body="{ data }">
 						<div class="flex items-center gap-2">
@@ -216,6 +205,12 @@ function openPlayerDialog(player) {
 				<PrimeColumn header="Edit" sortable style="width: 5%">
 					<template #body="{ data }">
 						<PrimeButton label="Edit" @click="openPlayerDialog(data)" />
+					</template>
+				</PrimeColumn>
+
+				<PrimeColumn header="Delete" sortable style="width: 5%">
+					<template #body="{ data }">
+						<PrimeButton label="Delete" @click="" />
 					</template>
 				</PrimeColumn>
 
