@@ -2,13 +2,6 @@
 import { ref, onMounted } from "vue";
 import { BalldontlieAPI } from "@balldontlie/sdk";
 
-import PrimeInputText from "primevue/inputtext";
-import PrimeIconField from "primevue/iconfield";
-import PrimeInputIcon from "primevue/inputicon";
-import PrimeColumn from "primevue/column";
-import PrimeDialog from "primevue/dialog";
-import PrimeButton from "primevue/button";
-
 import PlayerTable from "./components/PlayerTable.vue";
 import EditPlayerModal from "./components/EditPlayerModal.vue";
 
