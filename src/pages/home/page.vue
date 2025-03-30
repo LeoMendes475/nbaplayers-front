@@ -10,6 +10,7 @@ import PrimeDialog from "primevue/dialog";
 import PrimeButton from "primevue/button";
 
 import PlayerTable from "./components/PlayerTable.vue";
+import EditPlayerModal from "./components/EditPlayerModal.vue";
 
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
 
@@ -75,7 +76,7 @@ onMounted(() => {
 	getAllPlayers();
 });
 
-function openPlayerDialog(player) {
+function openEditPlayer(player) {
 	selectedPlayer.value = player;
 	visibleDialog.value = true;
 }
@@ -88,87 +89,15 @@ function openPlayerDialog(player) {
 		</div>
 
 		<div class="card">
-			<PlayerTable :players="players" />
+			<PlayerTable :players="players" @edit="openEditPlayer" />
 
-			<PrimeDialog
-				v-model:visible="visibleDialog"
-				modal
-				header="Edit Player"
-				:style="{ width: '50vw' }"
-				:breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-				class="flex flex-col"
-			>
-				<!-- Organizando os campos em uma lista -->
-				<ul class="flex flex-col gap-y-4">
-					<li class="flex flex-col">
-						<span>First name:</span>
-						<PrimeInputText
-							:modelValue="selectedPlayer?.first_name"
-							@update:modelValue="(value: string) => (selectedPlayer.first_name = value)"
-							placeholder="First Name"
-						/>
-					</li>
-
-					<li class="flex flex-col">
-						<span>Last name:</span>
-						<PrimeInputText
-							:modelValue="selectedPlayer?.last_name"
-							@update:modelValue="(value: string) => (selectedPlayer.last_name = value)"
-							placeholder="Last Name"
-						/>
-					</li>
-
-					<li class="flex flex-col">
-						<span>Team:</span>
-						<PrimeInputText
-							:modelValue="selectedPlayer?.team.name"
-							@update:modelValue="(value: string) => (selectedPlayer.team.name = value)"
-							placeholder="Team"
-						/>
-					</li>
-
-					<li class="flex flex-col">
-						<span>Position:</span>
-						<PrimeInputText
-							:modelValue="selectedPlayer?.position"
-							@update:modelValue="(value: string) => (selectedPlayer.position = value)"
-							placeholder="Position"
-						/>
-					</li>
-
-					<li class="flex flex-col">
-						<span>Jersey Number:</span>
-						<PrimeInputText
-							:modelValue="selectedPlayer?.jersey_number"
-							@update:modelValue="(value: string) => (selectedPlayer.jersey_number = value)"
-							placeholder="Jersey Number"
-						/>
-					</li>
-
-					<li class="flex flex-col">
-						<span>Height:</span>
-						<PrimeInputText
-							:modelValue="selectedPlayer?.height"
-							@update:modelValue="(value: any) => (selectedPlayer.height = value)"
-							placeholder="Height"
-						/>
-					</li>
-
-					<li class="flex flex-col">
-						<span>Country:</span>
-						<PrimeInputText
-							:modelValue="selectedPlayer?.country"
-							@update:modelValue="(value: any) => (selectedPlayer.country = value)"
-							placeholder="Country"
-						/>
-					</li>
-				</ul>
-
-				<div class="flex gap-x-4 !mt-4">
-					<PrimeButton label="Save" />
-					<PrimeButton label="Cancel" severity="secondary" />
-				</div>
-			</PrimeDialog>
+			<EditPlayerModal
+				:player="selectedPlayer"
+				:visible="visibleDialog"
+				@update:visible="visibleDialog = $event"
+				@update:player="selectedPlayer = $event"
+				@save="savePlayer"
+			/>
 		</div>
 	</div>
 </template>

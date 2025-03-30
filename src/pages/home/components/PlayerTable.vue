@@ -116,7 +116,7 @@
 
 			<PrimeColumn header="Edit" sortable style="width: 5%">
 				<template #body="{ data }">
-					<PrimeButton label="Edit" @click="openPlayerDialog(data)" />
+					<PrimeButton label="Edit" @click="editPlayer(data)" />
 				</template>
 			</PrimeColumn>
 
@@ -132,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineProps } from "vue";
+import { ref, defineProps, defineEmits } from "vue";
 import { BalldontlieAPI } from "@balldontlie/sdk";
 import PrimeDataTable from "primevue/datatable";
 import PrimeInputText from "primevue/inputtext";
@@ -152,9 +152,6 @@ const props = defineProps({
 const api = new BalldontlieAPI({
 	apiKey: "19f8c436-d540-43ee-8470-c95ef6ecc2ec",
 });
-
-const page = ref(1);
-const rows = ref(10);
 
 const visibleDialog = ref(false);
 const selectedPlayer = ref({
@@ -188,5 +185,11 @@ const filters = ref({
 function openPlayerDialog(player) {
 	selectedPlayer.value = player;
 	visibleDialog.value = true;
+}
+
+const emit = defineEmits(["edit"]);
+
+function editPlayer(player) {
+	emit("edit", player);
 }
 </script>

@@ -1,20 +1,18 @@
-<!-- src/components/PlayerDialog.vue -->
 <template>
 	<PrimeDialog
-		v-model:visible="visibleDialog"
+		v-model:visible="dialogVisible"
 		modal
 		header="Edit Player"
 		:style="{ width: '50vw' }"
 		:breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
 		class="flex flex-col"
 	>
-		<!-- Organizando os campos em uma lista -->
 		<ul class="flex flex-col gap-y-4">
 			<li class="flex flex-col">
 				<span>First name:</span>
 				<PrimeInputText
-					:modelValue="selectedPlayer?.first_name"
-					@update:modelValue="(value: string) => (selectedPlayer.first_name = value)"
+					:modelValue="player?.first_name"
+					@update:modelValue="(value: string) => updatePlayer('first_name', value)"
 					placeholder="First Name"
 				/>
 			</li>
@@ -22,45 +20,93 @@
 			<li class="flex flex-col">
 				<span>Last name:</span>
 				<PrimeInputText
-					:modelValue="selectedPlayer?.last_name"
-					@update:modelValue="(value: string) => (selectedPlayer.last_name = value)"
+					:modelValue="player?.last_name"
+					@update:modelValue="(value: string) => updatePlayer('last_name', value)"
 					placeholder="Last Name"
 				/>
 			</li>
 
-			<!-- Outros campos como Team, Position, Jersey Number, etc. -->
+			<li class="flex flex-col">
+				<span>Team:</span>
+				<PrimeInputText
+					:modelValue="player?.team?.name"
+					@update:modelValue="(value: string) => updatePlayer('team', { ...player.team, name: value })"
+					placeholder="Team"
+				/>
+			</li>
+
+			<li class="flex flex-col">
+				<span>Position:</span>
+				<PrimeInputText
+					:modelValue="player?.position"
+					@update:modelValue="(value: string) => updatePlayer('position', value)"
+					placeholder="Position"
+				/>
+			</li>
+
+			<li class="flex flex-col">
+				<span>Jersey Number:</span>
+				<PrimeInputText
+					:modelValue="player?.jersey_number"
+					@update:modelValue="(value: string) => updatePlayer('jersey_number', value)"
+					placeholder="Jersey Number"
+				/>
+			</li>
+
+			<li class="flex flex-col">
+				<span>Height:</span>
+				<PrimeInputText
+					:modelValue="player?.height"
+					@update:modelValue="(value: string) => updatePlayer('height', value)"
+					placeholder="Height"
+				/>
+			</li>
+
+			<li class="flex flex-col">
+				<span>Country:</span>
+				<PrimeInputText
+					:modelValue="player?.country"
+					@update:modelValue="(value: string) => updatePlayer('country', value)"
+					placeholder="Country"
+				/>
+			</li>
 		</ul>
 
 		<div class="flex gap-x-4 !mt-4">
-			<PrimeButton label="Save" />
-			<PrimeButton label="Cancel" severity="secondary" />
+			<PrimeButton label="Save" @click="saveChanges" />
+			<PrimeButton label="Cancel" severity="secondary" @click="closeDialog" />
 		</div>
 	</PrimeDialog>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { defineProps, defineEmits, computed } from "vue";
 import PrimeDialog from "primevue/dialog";
-import PrimeInputText from "primevue/inputtext";
 import PrimeButton from "primevue/button";
+import PrimeInputText from "primevue/inputtext";
 
-const visibleDialog = ref(false);
-const selectedPlayer = ref({
-	first_name: "",
-	last_name: "",
-	team: {},
-	position: "",
-	jersey_number: "",
-	height: "",
-	country: "",
+const props = defineProps({
+	player: Object,
+	visible: Boolean,
 });
 
-const openPlayerDialog = (player) => {
-	selectedPlayer.value = player;
-	visibleDialog.value = true;
-};
-</script>
+const emit = defineEmits(["update:visible", "update:player", "save"]);
 
-<style scoped>
-/* Estilos específicos para o componente PlayerDialog */
-</style>
+const dialogVisible = computed({
+	get: () => props.visible,
+	set: (value) => emit("update:visible", value),
+});
+
+function updatePlayer(field, value) {
+	emit("update:player", { ...props.player, [field]: value });
+}
+
+function saveChanges() {
+	emit("save", props.player);
+	closeDialog();
+}
+
+function closeDialog() {
+	emit("update:visible", false);
+}
+</script>
