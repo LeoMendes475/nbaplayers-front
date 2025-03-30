@@ -122,7 +122,7 @@
 
 			<PrimeColumn header="Delete" sortable style="width: 5%">
 				<template #body="{ data }">
-					<PrimeButton label="Delete" @click="" />
+					<PrimeButton label="Delete" @click="deletePlayer(data?.id)" />
 				</template>
 			</PrimeColumn>
 
@@ -153,7 +153,7 @@ const api = new BalldontlieAPI({
 	apiKey: "19f8c436-d540-43ee-8470-c95ef6ecc2ec",
 });
 
-const visibleDialog = ref(false);
+const visibleEditModal = ref(false);
 const selectedPlayer = ref({
 	first_name: "",
 	last_name: "",
@@ -184,12 +184,16 @@ const filters = ref({
 
 function openPlayerDialog(player) {
 	selectedPlayer.value = player;
-	visibleDialog.value = true;
+	visibleEditModal.value = true;
 }
 
-const emit = defineEmits(["edit"]);
+const emit = defineEmits(["edit", "delete"]);
 
 function editPlayer(player) {
 	emit("edit", player);
+}
+
+function deletePlayer(id: string) {
+	emit("delete", id);
 }
 </script>

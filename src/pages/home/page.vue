@@ -4,6 +4,7 @@ import { BalldontlieAPI } from "@balldontlie/sdk";
 
 import PlayerTable from "./components/PlayerTable.vue";
 import EditPlayerModal from "./components/EditPlayerModal.vue";
+import ConfirmModal from "../../components/ConfirmModal.vue";
 
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
 
@@ -15,7 +16,9 @@ const players = ref([]);
 const page = ref(1);
 const rows = ref(10);
 
-const visibleDialog = ref(false);
+const visibleEditModal = ref(false);
+const confirmModalVisible = ref(false);
+
 const selectedPlayer = ref({
 	first_name: "",
 	last_name: "",
@@ -71,7 +74,16 @@ onMounted(() => {
 
 function openEditPlayer(player) {
 	selectedPlayer.value = player;
-	visibleDialog.value = true;
+	visibleEditModal.value = true;
+}
+
+function confirmDelete(player) {
+	selectedPlayer.value = player;
+	confirmModalVisible.value = true;
+}
+
+function deletePlayer() {
+	console.log("deletado!");
 }
 </script>
 
@@ -82,15 +94,30 @@ function openEditPlayer(player) {
 		</div>
 
 		<div class="card !px-8 !py-4 !mb-8">
-			<PlayerTable :players="players" @edit="openEditPlayer" />
+			<PlayerTable
+				:players="players"
+				@edit="openEditPlayer"
+				@delete="confirmDelete"
+			/>
 		</div>
 
 		<EditPlayerModal
 			:player="selectedPlayer"
-			:visible="visibleDialog"
-			@update:visible="visibleDialog = $event"
+			:visible="visibleEditModal"
+			@update:visible="visibleEditModal = $event"
 			@update:player="selectedPlayer = $event"
 			@save="savePlayer"
+		/>
+
+		<ConfirmModal
+			:visible="confirmModalVisible"
+			title="Delete Player"
+			message="Are you sure you want to delete this player?"
+			confirmLabel="Delete"
+			cancelLabel="Cancel"
+			confirmSeverity="danger"
+			@update:visible="confirmModalVisible = $event"
+			@confirm="deletePlayer"
 		/>
 	</div>
 </template>

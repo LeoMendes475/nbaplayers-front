@@ -73,8 +73,8 @@
 		</ul>
 
 		<div class="flex gap-x-4 !mt-4">
-			<PrimeButton label="Save" @click="saveChanges" />
 			<PrimeButton label="Cancel" severity="secondary" @click="closeDialog" />
+			<PrimeButton label="Save" @click="saveChanges" />
 		</div>
 	</PrimeDialog>
 </template>
