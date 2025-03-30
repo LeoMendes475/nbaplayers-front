@@ -77,20 +77,20 @@ function openEditPlayer(player) {
 
 <template>
 	<div class="flex flex-col">
-		<div class="py-4 px-8">
+		<div class="!py-4 !px-8">
 			<h1 class="text-3xl">NBA Players</h1>
 		</div>
 
-		<div class="card">
+		<div class="card !px-8 !py-4 !mb-8">
 			<PlayerTable :players="players" @edit="openEditPlayer" />
-
-			<EditPlayerModal
-				:player="selectedPlayer"
-				:visible="visibleDialog"
-				@update:visible="visibleDialog = $event"
-				@update:player="selectedPlayer = $event"
-				@save="savePlayer"
-			/>
 		</div>
+
+		<EditPlayerModal
+			:player="selectedPlayer"
+			:visible="visibleDialog"
+			@update:visible="visibleDialog = $event"
+			@update:player="selectedPlayer = $event"
+			@save="savePlayer"
+		/>
 	</div>
 </template>

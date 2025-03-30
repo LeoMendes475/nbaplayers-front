@@ -7,7 +7,7 @@
 			stateStorage="session"
 			stateKey="dt-state-demo-session"
 			paginator
-			:rows="10"
+			:rows="8"
 			filterDisplay="menu"
 			selectionMode="single"
 			dataKey="id"
