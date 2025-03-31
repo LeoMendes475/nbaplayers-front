@@ -13,8 +13,8 @@ v18.20.7
 ### 🔹 1. Clone o repositório
 
 ```sh
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/LeoMendes475/nbaplayers-front.git
+cd nbaplayers-front
 ```
 
 ### 🔹 2. Instale as dependências
