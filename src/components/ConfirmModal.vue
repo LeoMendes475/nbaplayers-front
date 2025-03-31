@@ -45,7 +45,7 @@ const props = defineProps({
 	},
 	confirmSeverity: {
 		type: String,
-		default: "danger", // Pode ser "primary", "secondary", "success", etc.
+		default: "danger",
 	},
 });
 

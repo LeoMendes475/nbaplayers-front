@@ -12,10 +12,13 @@
 			selectionMode="single"
 			dataKey="id"
 			:globalFilterFields="[
-				'name',
-				'country.name',
-				'representative.name',
-				'status',
+				'first_name',
+				'last_name',
+				'team',
+				'jersey_number',
+				'position',
+				'height',
+				'country',
 			]"
 			tableStyle="min-width: 50rem"
 		>
@@ -31,7 +34,7 @@
 				</PrimeIconField>
 			</template>
 
-			<PrimeColumn field="name" header="Name" sortable style="width: 20%">
+			<PrimeColumn field="first_name" header="Name" sortable style="width: 20%">
 				<template #body="{ data }">
 					<div class="flex items-center gap-2">
 						<span>{{ data.first_name }} {{ data.last_name }}</span>
@@ -49,7 +52,7 @@
 			>
 				<template #body="{ data }">
 					<div class="flex items-center gap-2">
-						<span>{{ data.team.name }}</span>
+						<span>{{ data.team }}</span>
 					</div>
 				</template>
 			</PrimeColumn>
@@ -122,7 +125,11 @@
 
 			<PrimeColumn header="Delete" sortable style="width: 5%">
 				<template #body="{ data }">
-					<PrimeButton label="Delete" @click="deletePlayer(data?.id)" />
+					<PrimeButton
+						label="Delete"
+						severity="danger"
+						@click="deletePlayer(data?.id)"
+					/>
 				</template>
 			</PrimeColumn>
 
@@ -147,10 +154,6 @@ const props = defineProps({
 		type: Array,
 		default: () => [],
 	},
-});
-
-const api = new BalldontlieAPI({
-	apiKey: "19f8c436-d540-43ee-8470-c95ef6ecc2ec",
 });
 
 const visibleEditModal = ref(false);

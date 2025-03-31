@@ -4,13 +4,20 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   server: {
-    proxy: {
-      '/api': {
-        target: 'https://www.balldontlie.io',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
+		host: '0.0.0.0',
+		port: 5173,
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost',
+    //     changeOrigin: true,
+		// 		secure: false,
+    //     rewrite: (path) => path.replace(/^\/api/, ''),
+    //   },
+    // },
+		cors: {
+			origin: '*',
+			// credentials: true
+		}
   },
   plugins: [
     vue(),

@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { BalldontlieAPI } from "@balldontlie/sdk";
+import api from "../../services/index";
+import axios from "axios";
 
 import PlayerTable from "./components/PlayerTable.vue";
 import EditPlayerModal from "./components/EditPlayerModal.vue";
 import ConfirmModal from "../../components/ConfirmModal.vue";
 
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
-
-const api = new BalldontlieAPI({
-	apiKey: "19f8c436-d540-43ee-8470-c95ef6ecc2ec",
-});
+import PrimeToast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
 const players = ref([]);
 const page = ref(1);
@@ -18,11 +17,12 @@ const rows = ref(10);
 
 const visibleEditModal = ref(false);
 const confirmModalVisible = ref(false);
+const toast = useToast();
 
 const selectedPlayer = ref({
 	first_name: "",
 	last_name: "",
-	team: {},
+	team: "",
 	position: "",
 	jersey_number: "",
 	height: "",
@@ -35,9 +35,7 @@ async function getAllPlayers() {
 	let allPlayers = [];
 
 	try {
-		const response = await api.nba.getPlayers({
-			per_page: 100,
-		});
+		const response = await api.get("/players/findAll");
 
 		rows.value = response.meta?.per_page;
 
@@ -50,24 +48,6 @@ async function getAllPlayers() {
 	}
 }
 
-const focusedPlayer = ref();
-const filters = ref({
-	global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-	name: {
-		operator: FilterOperator.AND,
-		constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-	},
-	"country.name": {
-		operator: FilterOperator.AND,
-		constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-	},
-	representative: { value: null, matchMode: FilterMatchMode.IN },
-	status: {
-		operator: FilterOperator.OR,
-		constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-	},
-});
-
 onMounted(() => {
 	getAllPlayers();
 });
@@ -77,13 +57,64 @@ function openEditPlayer(player) {
 	visibleEditModal.value = true;
 }
 
-function confirmDelete(player) {
-	selectedPlayer.value = player;
+function OpenConfirmDeleteModal(id: string) {
+	selectedPlayer.value = id;
 	confirmModalVisible.value = true;
 }
 
-function deletePlayer() {
-	console.log("deletado!");
+async function savePlayer() {
+	await api
+		.put(`/players/${selectedPlayer.value.id}`, {
+			...selectedPlayer.value,
+			team: selectedPlayer.value.team.name,
+		})
+		.then(() => {
+			getAllPlayers();
+			toast.add({
+				severity: "success",
+				summary: "Success",
+				detail: "Player edited successfully",
+				life: 3000,
+			});
+		})
+		.catch((error) => {
+			console.error("Error editing player:", error);
+
+			toast.add({
+				severity: "error",
+				summary: "Error",
+				detail: "Error editing player",
+				life: 3000,
+			});
+		});
+
+	visibleEditModal.value = false;
+}
+
+async function deletePlayer() {
+	await api
+		.delete(`/players/${selectedPlayer.value}`)
+		.then(() => {
+			getAllPlayers();
+			toast.add({
+				severity: "success",
+				summary: "Success",
+				detail: "player deleted successfully",
+				life: 3000,
+			});
+		})
+		.catch((error) => {
+			console.error("error deleting player:", error);
+
+			toast.add({
+				severity: "error",
+				summary: "Error",
+				detail: "error deleting player",
+				life: 3000,
+			});
+		});
+
+	confirmModalVisible.value = false;
 }
 </script>
 
@@ -97,7 +128,7 @@ function deletePlayer() {
 			<PlayerTable
 				:players="players"
 				@edit="openEditPlayer"
-				@delete="confirmDelete"
+				@delete="OpenConfirmDeleteModal"
 			/>
 		</div>
 
@@ -106,7 +137,7 @@ function deletePlayer() {
 			:visible="visibleEditModal"
 			@update:visible="visibleEditModal = $event"
 			@update:player="selectedPlayer = $event"
-			@save="savePlayer"
+			@save="savePlayer()"
 		/>
 
 		<ConfirmModal
@@ -117,7 +148,9 @@ function deletePlayer() {
 			cancelLabel="Cancel"
 			confirmSeverity="danger"
 			@update:visible="confirmModalVisible = $event"
-			@confirm="deletePlayer"
+			@confirm="deletePlayer()"
 		/>
+
+		<PrimeToast />
 	</div>
 </template>
