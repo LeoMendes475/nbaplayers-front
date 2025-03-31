@@ -1,5 +1,48 @@
-# Vue 3 + TypeScript + Vite
+# 📌 Projeto Vue.js com Vite e Testes
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Este projeto utiliza **Vue.js** com **Vite** para um desenvolvimento rápido e eficiente. Além disso, conta com suporte para testes automatizados.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 🚀 Como rodar o projeto
+
+### 🔹 1. Clone o repositório
+
+```sh
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+```
+
+### 🔹 2. Instale as dependências
+
+```sh
+npm install
+```
+
+### 🔹 3. Execute o servidor de desenvolvimento
+
+```sh
+npm run dev
+```
+
+Agora, acesse o projeto no navegador em:
+
+```sh
+http://localhost:5173
+```
+
+## 🧪 Executando os testes
+
+### 🔹 Testes unitários
+
+Para rodar os testes com Jest, basta executar o seguinte comando:
+
+```sh
+npm run test
+```
+
+### 🔹 Testes e2e (End-to-End)
+
+Se o projeto inclui testes E2E com **Cypress**, execute:
+
+```sh
+npm run test:e2e
+```
