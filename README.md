@@ -2,6 +2,12 @@
 
 Este projeto utiliza **Vue.js** com **Vite** para um desenvolvimento rápido e eficiente. Além disso, conta com suporte para testes automatizados.
 
+Versões utilizadas
+```
+-> Node
+v18.20.7
+```
+
 ## 🚀 Como rodar o projeto
 
 ### 🔹 1. Clone o repositório
